@@ -7,6 +7,10 @@ const countdownElTitle = document.getElementById("countdown-title");
 const countdownElbtn = document.getElementById("countdown-button");
 const timeElements = document.querySelectorAll("span");
 
+const completeEl = document.getElementById("complete");
+const completeElInfo = document.getElementById("complete-info");
+const completeBtn = document.getElementById("complete-button");
+
 let countdownTitle = "";
 let countdownDate = "";
 let countdownValue = Date;
@@ -43,15 +47,27 @@ function updateDOM() {
       seconds
     );
 
-    //   Populating Countdown
-    countdownElTitle.textContent = `${countdownTitle}`;
-    timeElements[0].textContent = `${days}`;
-    timeElements[1].textContent = `${hours}`;
-    timeElements[2].textContent = `${minutes}`;
-    timeElements[3].textContent = `${seconds}`;
-
     //  Hide input
     inputContainer.hidden = true;
+
+    // If countdown has ended, show complete
+    if (diffrence < 0) {
+      countdownEl.hidden = true;
+      clearInterval(countdownActive);
+      completeElInfo.innerText = `${countdownTitle} finished on ${countdownDate}`;
+      completeEl.hidden = false;
+    } else {
+      // show the countdown in progress
+
+      //   Populating Countdown
+      countdownElTitle.textContent = `${countdownTitle}`;
+      timeElements[0].textContent = `${days}`;
+      timeElements[1].textContent = `${hours}`;
+      timeElements[2].textContent = `${minutes}`;
+      timeElements[3].textContent = `${seconds}`;
+      completeEl.hidden = true;
+      countdownEl.hidden = false;
+    }
 
     // Show Countdown
     countdownEl.hidden = false;
@@ -79,6 +95,7 @@ function updateCoundown(e) {
 function reset() {
   // Hide Countdowns, show Input
   countdownEl.hidden = true;
+  completeEl.hidden = true;
   inputContainer.hidden = false;
 
   // Stop the countdown
@@ -92,3 +109,4 @@ function reset() {
 // Event Listeners
 countdownForm.addEventListener("submit", updateCoundown);
 countdownElbtn.addEventListener("click", reset);
+completeBtn.addEventListener("click", reset);
